@@ -19,6 +19,9 @@
 #include "test_root.h"
 
 /**
+ * @file    test_sequence_007.c
+ * @brief   Test Sequence 007 code.
+ *
  * @page test_sequence_007 [7] Event Sources and Event Flags
  *
  * File: @ref test_sequence_007.c
@@ -403,12 +406,19 @@ static const testcase_t test_007_005 = {
   test_007_005_execute
 };
 
+#if (CH_CFG_USE_EVENTS_TIMEOUT) || defined(__DOXYGEN__)
 /**
  * @page test_007_006 [7.6] Events Flags wait timeouts
  *
  * <h2>Description</h2>
  * Timeout functionality is tested for chEvtWaitOneTimeout(),
  * chEvtWaitAnyTimeout() and chEvtWaitAllTimeout().
+ *
+ * <h2>Conditions</h2>
+ * This test is only executed if the following preprocessor condition
+ * evaluates to true:
+ * - CH_CFG_USE_EVENTS_TIMEOUT
+ * .
  *
  * <h2>Test Steps</h2>
  * - [7.6.1] The functions are invoked first with TIME_IMMEDIATE
@@ -456,6 +466,7 @@ static const testcase_t test_007_006 = {
   NULL,
   test_007_006_execute
 };
+#endif /* CH_CFG_USE_EVENTS_TIMEOUT */
 
 /**
  * @page test_007_007 [7.7] Broadcasting using chEvtBroadcast()
@@ -548,7 +559,9 @@ const testcase_t * const test_sequence_007[] = {
   &test_007_003,
   &test_007_004,
   &test_007_005,
+#if (CH_CFG_USE_EVENTS_TIMEOUT) || defined(__DOXYGEN__)
   &test_007_006,
+#endif
   &test_007_007,
   NULL
 };

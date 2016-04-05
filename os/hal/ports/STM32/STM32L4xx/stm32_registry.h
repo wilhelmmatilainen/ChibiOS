@@ -15,15 +15,15 @@
 */
 
 /**
- * @file    STM32L0xx/stm32_registry.h
- * @brief   STM32L0xx capabilities registry.
+ * @file    STM32L4xx/stm32_registry.h
+ * @brief   STM32L4xx capabilities registry.
  *
  * @addtogroup HAL
  * @{
  */
 
-#ifndef _STM32_REGISTRY_H_
-#define _STM32_REGISTRY_H_
+#ifndef STM32_REGISTRY_H
+#define STM32_REGISTRY_H
 
 /*===========================================================================*/
 /* Platform capabilities.                                                    */
@@ -414,6 +414,6 @@
 #define STM32_CRC_PROGRAMMABLE              TRUE
 /** @} */
 
-#endif /* _STM32_REGISTRY_H_ */
+#endif /* STM32_REGISTRY_H */
 
 /** @} */

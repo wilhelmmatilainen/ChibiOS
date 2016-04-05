@@ -98,10 +98,10 @@ static void _idle_thread(void *p) {
  * @special
  */
 void chSysInit(void) {
-  extern stkalign_t __main_thread_stack_base__;
 
   _scheduler_init();
   _vt_init();
+  _trace_init();
 
 #if CH_DBG_SYSTEM_STATE_CHECK == TRUE
   ch.dbg.isr_cnt  = (cnt_t)0;
@@ -119,9 +119,6 @@ void chSysInit(void) {
 #if CH_DBG_STATISTICS == TRUE
   _stats_init();
 #endif
-#if CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE
-  _dbg_trace_init();
-#endif
 
 #if CH_CFG_NO_IDLE_THREAD == FALSE
   /* Now this instructions flow becomes the main thread.*/
@@ -135,8 +132,16 @@ void chSysInit(void) {
   currp = _thread_init(&ch.mainthread, "idle", IDLEPRIO);
 #endif
 
-  /* Setting up the base address of the static main thread stack.*/
-  currp->stklimit = &__main_thread_stack_base__;
+#if CH_DBG_ENABLE_STACK_CHECK == TRUE
+  {
+    /* Setting up the base address of the static main thread stack, the
+       symbol must be provided externally.*/
+    extern stkalign_t __main_thread_stack_base__;
+    currp->wabase = &__main_thread_stack_base__;
+  }
+#elif CH_CFG_USE_DYNAMIC == TRUE
+  currp->wabase = NULL;
+#endif
 
   /* Setting up the caller as current thread.*/
   currp->state = CH_STATE_CURRENT;
@@ -192,7 +197,7 @@ void chSysHalt(const char *reason) {
   CH_CFG_SYSTEM_HALT_HOOK(reason);
 
   /* Logging the event.*/
-  _dbg_trace_halt(reason);
+  _trace_halt(reason);
 
   /* Pointing to the passed message.*/
   ch.dbg.panic_msg = reason;
@@ -240,14 +245,14 @@ bool chSysIntegrityCheckI(unsigned testmask) {
     tp = ch.rlist.queue.next;
     while (tp != (thread_t *)&ch.rlist.queue) {
       n++;
-      tp = tp->next;
+      tp = tp->queue.next;
     }
 
     /* Scanning the ready list backward.*/
     tp = ch.rlist.queue.prev;
     while (tp != (thread_t *)&ch.rlist.queue) {
       n--;
-      tp = tp->prev;
+      tp = tp->queue.prev;
     }
 
     /* The number of elements must match.*/

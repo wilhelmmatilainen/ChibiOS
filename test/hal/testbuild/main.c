@@ -24,5 +24,7 @@ int main(int argc, char *argv[]) {
   (void)argc;
   (void)argv;
 
+  halInit();
+
   return 0;
 }

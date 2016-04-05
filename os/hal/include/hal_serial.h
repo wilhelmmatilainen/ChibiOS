@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    serial.h
+ * @file    hal_serial.h
  * @brief   Serial Driver macros and structures.
  *
  * @addtogroup SERIAL
@@ -93,7 +93,7 @@ typedef enum {
  */
 typedef struct SerialDriver SerialDriver;
 
-#include "serial_lld.h"
+#include "hal_serial_lld.h"
 
 /**
  * @brief   @p SerialDriver specific methods.

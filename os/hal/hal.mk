@@ -1,9 +1,9 @@
 # List of all the ChibiOS/HAL files, there is no need to remove the files
 # from this list, you can disable parts of the HAL by editing halconf.h.
 ifeq ($(USE_SMART_BUILD),yes)
-HALCONF := $(strip $(shell cat halconf.h | egrep -e "define"))
+HALCONF := $(strip $(shell cat halconf.h | egrep -e "\#define"))
 
-HALSRC := $(CHIBIOS)/os/hal/src/hal_hal.c \
+HALSRC := $(CHIBIOS)/os/hal/src/hal.c \
           $(CHIBIOS)/os/hal/src/hal_st.c \
           $(CHIBIOS)/os/hal/src/hal_buffers.c \
           $(CHIBIOS)/os/hal/src/hal_queues.c \
@@ -69,7 +69,7 @@ ifneq ($(findstring HAL_USE_WDG TRUE,$(HALCONF)),)
 HALSRC += $(CHIBIOS)/os/hal/src/hal_wdg.c
 endif
 else
-HALSRC = $(CHIBIOS)/os/hal/src/hal_hal.c \
+HALSRC = $(CHIBIOS)/os/hal/src/hal.c \
          $(CHIBIOS)/os/hal/src/hal_buffers.c \
          $(CHIBIOS)/os/hal/src/hal_queues.c \
          $(CHIBIOS)/os/hal/src/hal_mmcsd.c \

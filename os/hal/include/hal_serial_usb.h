@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    serial_usb.h
+ * @file    hal_serial_usb.h
  * @brief   Serial over USB Driver macros and structures.
  *
  * @addtogroup SERIAL_USB
@@ -27,7 +27,7 @@
 
 #if (HAL_USE_SERIAL_USB == TRUE) || defined(__DOXYGEN__)
 
-#include "usb_cdc.h"
+#include "hal_usb_cdc.h"
 
 /*===========================================================================*/
 /* Driver constants.                                                         */

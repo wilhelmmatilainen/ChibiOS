@@ -19,6 +19,9 @@
 #include "test_root.h"
 
 /**
+ * @file    test_sequence_004.c
+ * @brief   Test Sequence 004 code.
+ *
  * @page test_sequence_004 [4] Counter and Binary Semaphores
  *
  * File: @ref test_sequence_004.c
@@ -193,11 +196,11 @@ static void test_004_002_execute(void) {
     chSemSignal(&sem1);
     chSemSignal(&sem1);
     test_wait_threads();
-    #if CH_CFG_USE_SEMAPHORES_PRIORITY
-      test_assert_sequence("ADCEB", "invalid sequence");
-    #else
-      test_assert_sequence("ABCDE", "invalid sequence");
-    #endif
+#if CH_CFG_USE_SEMAPHORES_PRIORITY
+    test_assert_sequence("ADCEB", "invalid sequence");
+#else
+    test_assert_sequence("ABCDE", "invalid sequence");
+#endif
   }
 }
 

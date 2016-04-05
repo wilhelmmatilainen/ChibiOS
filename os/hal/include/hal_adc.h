@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    adc.h
+ * @file    hal_adc.h
  * @brief   ADC Driver macros and structures.
  *
  * @addtogroup ADC
@@ -76,7 +76,7 @@ typedef enum {
   ADC_ERROR = 5                             /**< Conversion complete.       */
 } adcstate_t;
 
-#include "adc_lld.h"
+#include "hal_adc_lld.h"
 
 /*===========================================================================*/
 /* Driver macros.                                                            */

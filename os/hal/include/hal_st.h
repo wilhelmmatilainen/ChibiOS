@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    st.h
+ * @file    hal_st.h
  * @brief   ST Driver macros and structures.
  * @details This header is designed to be include-able without having to
  *          include other files from the HAL.
@@ -43,7 +43,7 @@
 /* Driver data structures and types.                                         */
 /*===========================================================================*/
 
-#include "st_lld.h"
+#include "hal_st_lld.h"
 
 /*===========================================================================*/
 /* Driver macros.                                                            */

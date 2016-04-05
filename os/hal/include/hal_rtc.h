@@ -19,7 +19,7 @@
  */
 
 /**
- * @file    rtc.h
+ * @file    hal_rtc.h
  * @brief   RTC Driver macros and structures.
  *
  * @addtogroup RTC
@@ -101,7 +101,7 @@ typedef struct {
   /*lint -restore*/
 } RTCDateTime;
 
-#include "rtc_lld.h"
+#include "hal_rtc_lld.h"
 
 /*===========================================================================*/
 /* Driver macros.                                                            */

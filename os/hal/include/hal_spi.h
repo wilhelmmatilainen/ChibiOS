@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    spi.h
+ * @file    hal_spi.h
  * @brief   SPI Driver macros and structures.
  *
  * @addtogroup SPI
@@ -75,7 +75,7 @@ typedef enum {
   SPI_COMPLETE = 4                  /**< Asynchronous operation complete.   */
 } spistate_t;
 
-#include "spi_lld.h"
+#include "hal_spi_lld.h"
 
 /*===========================================================================*/
 /* Driver macros.                                                            */

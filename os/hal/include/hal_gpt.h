@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    gpt.h
+ * @file    hal_gpt.h
  * @brief   GPT Driver macros and structures.
  *
  * @addtogroup GPT
@@ -66,7 +66,7 @@ typedef struct GPTDriver GPTDriver;
  */
 typedef void (*gptcallback_t)(GPTDriver *gptp);
 
-#include "gpt_lld.h"
+#include "hal_gpt_lld.h"
 
 /*===========================================================================*/
 /* Driver macros.                                                            */

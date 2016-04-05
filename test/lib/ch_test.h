@@ -22,8 +22,8 @@
  * @{
  */
 
-#ifndef _CH_TEST_H_
-#define _CH_TEST_H_
+#ifndef CH_TEST_H
+#define CH_TEST_H
 
 /*===========================================================================*/
 /* Module constants.                                                         */
@@ -156,6 +156,7 @@ typedef struct {
 
 #if !defined(__DOXYGEN__)
 extern unsigned test_step;
+extern bool test_global_fail;
 #endif
 
 #ifdef __cplusplus
@@ -187,6 +188,6 @@ extern "C" {
 
 #include "test_root.h"
 
-#endif /* _CH_TEST_H_ */
+#endif /* CH_TEST_H */
 
 /** @} */

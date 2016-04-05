@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    ext.h
+ * @file    hal_ext.h
  * @brief   EXT Driver macros and structures.
  *
  * @addtogroup EXT
@@ -71,7 +71,7 @@ typedef enum {
  */
 typedef struct EXTDriver EXTDriver;
 
-#include "ext_lld.h"
+#include "hal_ext_lld.h"
 
 /*===========================================================================*/
 /* Driver macros.                                                            */

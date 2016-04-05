@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    pwm.h
+ * @file    hal_pwm.h
  * @brief   PWM Driver macros and structures.
  *
  * @addtogroup PWM
@@ -89,7 +89,7 @@ typedef struct PWMDriver PWMDriver;
  */
 typedef void (*pwmcallback_t)(PWMDriver *pwmp);
 
-#include "pwm_lld.h"
+#include "hal_pwm_lld.h"
 
 /*===========================================================================*/
 /* Driver macros.                                                            */

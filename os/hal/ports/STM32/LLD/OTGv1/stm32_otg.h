@@ -15,15 +15,15 @@
 */
 
 /**
- * @file    stm32_otg.h
+ * @file    OTGv1/stm32_otg.h
  * @brief   STM32 OTG registers layout header.
  *
  * @addtogroup USB
  * @{
  */
 
-#ifndef _STM32_OTG_H_
-#define _STM32_OTG_H_
+#ifndef STM32_OTG_H
+#define STM32_OTG_H
 
 /**
  * @brief   Number of the implemented endpoints in OTG_FS.
@@ -924,6 +924,6 @@ typedef struct {
  */
 #define OTG_HS                      ((stm32_otg_t *)OTG_HS_ADDR)
 
-#endif /* _STM32_OTG_H_ */
+#endif /* STM32_OTG_H */
 
 /** @} */

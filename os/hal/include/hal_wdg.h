@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    wdg.h
+ * @file    hal_wdg.h
  * @brief   WDG Driver macros and structures.
  *
  * @addtogroup WDG
@@ -52,7 +52,7 @@ typedef enum {
   WDG_READY = 2                     /**< Ready.                             */
 } wdgstate_t;
 
-#include "wdg_lld.h"
+#include "hal_wdg_lld.h"
 
 /*===========================================================================*/
 /* Driver macros.                                                            */

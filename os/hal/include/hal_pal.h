@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    pal.h
+ * @file    hal_pal.h
  * @brief   I/O Ports Abstraction Layer macros, types and structures.
  *
  * @addtogroup PAL
@@ -110,7 +110,7 @@
 /* Driver data structures and types.                                         */
 /*===========================================================================*/
 
-#include "pal_lld.h"
+#include "hal_pal_lld.h"
 
 /**
  * @brief   I/O bus descriptor.

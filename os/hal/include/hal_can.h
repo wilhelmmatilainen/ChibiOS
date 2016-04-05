@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    can.h
+ * @file    hal_can.h
  * @brief   CAN Driver macros and structures.
  *
  * @addtogroup CAN
@@ -100,7 +100,7 @@ typedef enum {
   CAN_SLEEP = 4                             /**< Sleep state.               */
 } canstate_t;
 
-#include "can_lld.h"
+#include "hal_can_lld.h"
 
 /*===========================================================================*/
 /* Driver macros.                                                            */

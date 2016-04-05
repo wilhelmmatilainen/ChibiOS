@@ -31,6 +31,8 @@
  * - @subpage test_sequence_008
  * - @subpage test_sequence_009
  * - @subpage test_sequence_010
+ * - @subpage test_sequence_011
+ * - @subpage test_sequence_012
  * .
  */
 
@@ -56,13 +58,31 @@ const testcase_t * const *test_suite[] = {
   test_sequence_001,
   test_sequence_002,
   test_sequence_003,
+#if (CH_CFG_USE_SEMAPHORES) || defined(__DOXYGEN__)
   test_sequence_004,
+#endif
+#if (CH_CFG_USE_MUTEXES) || defined(__DOXYGEN__)
   test_sequence_005,
+#endif
+#if (CH_CFG_USE_MESSAGES) || defined(__DOXYGEN__)
   test_sequence_006,
+#endif
+#if (CH_CFG_USE_EVENTS) || defined(__DOXYGEN__)
   test_sequence_007,
+#endif
+#if (CH_CFG_USE_MAILBOXES) || defined(__DOXYGEN__)
   test_sequence_008,
+#endif
+#if (CH_CFG_USE_MEMPOOLS) || defined(__DOXYGEN__)
   test_sequence_009,
+#endif
+#if (CH_CFG_USE_HEAP) || defined(__DOXYGEN__)
   test_sequence_010,
+#endif
+#if (CH_CFG_USE_DYNAMIC) || defined(__DOXYGEN__)
+  test_sequence_011,
+#endif
+  test_sequence_012,
   NULL
 };
 
@@ -91,7 +111,7 @@ void * ROMCONST wa[5] = {test.wa.T0, test.wa.T1, test.wa.T2,
  * Sets a termination request in all the test-spawned threads.
  */
 void test_terminate_threads(void) {
-  int i;
+  unsigned i;
 
   for (i = 0; i < MAX_THREADS; i++)
     if (threads[i])
@@ -102,7 +122,7 @@ void test_terminate_threads(void) {
  * Waits for the completion of all the test-spawned threads.
  */
 void test_wait_threads(void) {
-  int i;
+  unsigned i;
 
   for (i = 0; i < MAX_THREADS; i++)
     if (threads[i] != NULL) {
@@ -111,6 +131,9 @@ void test_wait_threads(void) {
     }
 }
 
+/*
+ * Delays execution until next system time tick.
+ */
 systime_t test_wait_tick(void) {
 
   chThdSleep(1);

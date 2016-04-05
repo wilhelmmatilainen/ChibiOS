@@ -19,6 +19,9 @@
 #include "test_root.h"
 
 /**
+ * @file    test_sequence_001.c
+ * @brief   Test Sequence 001 code.
+ *
  * @page test_sequence_001 [1] System layer and port interface
  *
  * File: @ref test_sequence_001.c
@@ -249,6 +252,9 @@ static void test_001_004_execute(void) {
   {
     systime_t time = chVTGetSystemTimeX();
     while (time == chVTGetSystemTimeX()) {
+#if defined(SIMULATOR)
+      _sim_check_for_interrupts();
+#endif
     }
   }
 }

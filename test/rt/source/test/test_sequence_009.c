@@ -19,6 +19,9 @@
 #include "test_root.h"
 
 /**
+ * @file    test_sequence_009.c
+ * @brief   Test Sequence 009 code.
+ *
  * @page test_sequence_009 [9] Memory Pools
  *
  * File: @ref test_sequence_009.c
@@ -50,7 +53,10 @@
 
 static uint32_t objects[MEMORY_POOL_SIZE];
 static MEMORYPOOL_DECL(mp1, sizeof (uint32_t), NULL);
+
+#if CH_CFG_USE_SEMAPHORES
 static GUARDEDMEMORYPOOL_DECL(gmp1, sizeof (uint32_t));
+#endif
 
 static void *null_provider(size_t size, unsigned align) {
 

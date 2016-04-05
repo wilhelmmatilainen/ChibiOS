@@ -19,7 +19,7 @@
  */
 
 /**
- * @file    i2c.h
+ * @file    hal_i2c.h
  * @brief   I2C Driver macros and structures.
  *
  * @addtogroup I2C
@@ -82,7 +82,7 @@ typedef enum {
   I2C_LOCKED = 5                            /**> Bus or driver locked.      */
 } i2cstate_t;
 
-#include "i2c_lld.h"
+#include "hal_i2c_lld.h"
 
 /*===========================================================================*/
 /* Driver macros.                                                            */

@@ -106,59 +106,6 @@
                                                  flag.                      */
 /** @} */
 
-/**
- * @name    Working Areas
- */
-/**
- * @brief   Calculates the total Working Area size.
- *
- * @param[in] n         the stack size to be assigned to the thread
- * @return              The total used memory in bytes.
- *
- * @api
- */
-#define THD_WORKING_AREA_SIZE(n)                                            \
-  MEM_ALIGN_NEXT(sizeof(thread_t) + PORT_WA_SIZE(n), PORT_STACK_ALIGN)
-
-/**
- * @brief   Static working area allocation.
- * @details This macro is used to allocate a static thread working area
- *          aligned as both position and size.
- *
- * @param[in] s         the name to be assigned to the stack array
- * @param[in] n         the stack size to be assigned to the thread
- *
- * @api
- */
-#define THD_WORKING_AREA(s, n) PORT_WORKING_AREA(s, n)
-
-/**
- * @brief   Base of a working area casted to the correct type.
- *
- * @param[in] s         name of the working area
- */
-#define THD_WORKING_AREA_BASE(s) ((stkalign_t *)(s))
-
-/**
- * @brief   End of a working area casted to the correct type.
- *
- * @param[in] s         name of the working area
- */
-#define THD_WORKING_AREA_END(s) (THD_WORKING_AREA_BASE(s) +                 \
-                                 (sizeof (s) / sizeof (stkalign_t)))
-/** @} */
-
-/**
- * @name    Threads abstraction macros
- */
-/**
- * @brief   Thread declaration macro.
- * @note    Thread declarations should be performed using this macro because
- *          the port layer could define optimizations for thread functions.
- */
-#define THD_FUNCTION(tname, arg) PORT_THD_FUNCTION(tname, arg)
-/** @} */
-
 /*===========================================================================*/
 /* Module pre-compile time settings.                                         */
 /*===========================================================================*/
@@ -205,10 +152,7 @@ struct ch_threads_queue {
  *          by shrinking this structure.
  */
 struct ch_thread {
-  thread_t              *next;      /**< @brief Next in the list/queue.     */
-  /* End of the fields shared with the threads_list_t structure.*/
-  thread_t              *prev;      /**< @brief Previous in the queue.      */
-  /* End of the fields shared with the threads_queue_t structure.*/
+  threads_queue_t       queue;      /**< @brief Threads queue header.       */
   tprio_t               prio;       /**< @brief Thread priority.            */
   struct port_context   ctx;        /**< @brief Processor context.          */
 #if (CH_CFG_USE_REGISTRY == TRUE) || defined(__DOXYGEN__)
@@ -222,11 +166,15 @@ struct ch_thread {
    */
   const char            *name;
 #endif
+#if (CH_DBG_ENABLE_STACK_CHECK == TRUE) || (CH_CFG_USE_DYNAMIC == TRUE) ||  \
+    defined(__DOXYGEN__)
   /**
-   * @brief   Thread stack boundary.
-   * @note    This pointer matches with the working area base address.
+   * @brief   Working area base address.
+   * @note    This pointer is used for stack overflow checks and for
+   *          dynamic threading.
    */
-  stkalign_t            *stklimit;
+  stkalign_t            *wabase;
+#endif
   /**
    * @brief   Current thread state.
    */
@@ -448,7 +396,7 @@ struct ch_system_debug {
    */
   cnt_t                 lock_cnt;
 #endif
-#if (CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE) || defined(__DOXYGEN__)
+#if (CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_DISABLED) || defined(__DOXYGEN__)
   /**
    * @brief   Public trace buffer.
    */
@@ -634,14 +582,14 @@ static inline bool queue_notempty(const threads_queue_t *tqp) {
 #if CH_CFG_OPTIMIZE_SPEED == TRUE
 static inline void list_insert(thread_t *tp, threads_list_t *tlp) {
 
-  tp->next = tlp->next;
+  tp->queue.next = tlp->next;
   tlp->next = tp;
 }
 
 static inline thread_t *list_remove(threads_list_t *tlp) {
 
   thread_t *tp = tlp->next;
-  tlp->next = tp->next;
+  tlp->next = tp->queue.next;
 
   return tp;
 }
@@ -650,27 +598,27 @@ static inline void queue_prio_insert(thread_t *tp, threads_queue_t *tqp) {
 
   thread_t *cp = (thread_t *)tqp;
   do {
-    cp = cp->next;
+    cp = cp->queue.next;
   } while ((cp != (thread_t *)tqp) && (cp->prio >= tp->prio));
-  tp->next = cp;
-  tp->prev = cp->prev;
-  tp->prev->next = tp;
-  cp->prev = tp;
+  tp->queue.next             = cp;
+  tp->queue.prev             = cp->queue.prev;
+  tp->queue.prev->queue.next = tp;
+  cp->queue.prev             = tp;
 }
 
 static inline void queue_insert(thread_t *tp, threads_queue_t *tqp) {
 
-  tp->next = (thread_t *)tqp;
-  tp->prev = tqp->prev;
-  tp->prev->next = tp;
-  tqp->prev = tp;
+  tp->queue.next             = (thread_t *)tqp;
+  tp->queue.prev             = tqp->prev;
+  tp->queue.prev->queue.next = tp;
+  tqp->prev                  = tp;
 }
 
 static inline thread_t *queue_fifo_remove(threads_queue_t *tqp) {
   thread_t *tp = tqp->next;
 
-  tqp->next = tp->next;
-  tqp->next->prev = (thread_t *)tqp;
+  tqp->next             = tp->queue.next;
+  tqp->next->queue.prev = (thread_t *)tqp;
 
   return tp;
 }
@@ -678,16 +626,16 @@ static inline thread_t *queue_fifo_remove(threads_queue_t *tqp) {
 static inline thread_t *queue_lifo_remove(threads_queue_t *tqp) {
   thread_t *tp = tqp->prev;
 
-  tqp->prev = tp->prev;
-  tqp->prev->next = (thread_t *)tqp;
+  tqp->prev             = tp->queue.prev;
+  tqp->prev->queue.next = (thread_t *)tqp;
 
   return tp;
 }
 
 static inline thread_t *queue_dequeue(thread_t *tp) {
 
-  tp->prev->next = tp->next;
-  tp->next->prev = tp->prev;
+  tp->queue.prev->queue.next = tp->queue.next;
+  tp->queue.next->queue.prev = tp->queue.prev;
 
   return tp;
 }
